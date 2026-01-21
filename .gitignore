@@ -1,0 +1,23 @@
+# backend/ (removed to track source)
+**/bin/
+**/obj/
+**/*.user
+**/*.suo
+**/.vs/
+
+# frontend/ (removed to track source)
+node_modules/
+dist/
+.env
+.env.local
+
+# IDEs
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# OS
+.DS_Store
+Thumbs.db
