@@ -1,6 +1,6 @@
 # Product Management - Monorepo
 
-Aplicación de gestión de productos con arquitectura monorepo. Backend en .NET 8 con Clean Architecture y GraphQL, frontend en React con Vite y Tailwind CSS.
+Este proyecto consiste en una aplicación integral de gestión de productos estructurada como un monorepo, utilizando **.NET 8** con **Clean Architecture** en el backend y **React 18** con **Vite** en el frontend. La implementación de **GraphQL** se realizó utilizando el framework **HotChocolate**, el cual permite una exposición eficiente del modelo de datos mediante consultas (Queries) y mutaciones. Para integrar GraphQL de forma robusta, se configuraron resolvers específicos en la capa de Aplicación que utilizan inyección de dependencias por método (`[Service]`) para interactuar con **Entity Framework Core** y **PostgreSQL**, garantizando un manejo adecuado del ciclo de vida del contexto de base de datos. En el frontend, se desarrolló un cliente ligero basado en **Axios** para consumir el endpoint de GraphQL, permitiendo obtener listas de productos con sus categorías y crear nuevos registros mediante formularios validados de forma dinámica y eficiente.
 
 ## Estructura del Proyecto
 
