@@ -2,8 +2,18 @@ using ProductManagement.Application.GraphQL.Mutations;
 using ProductManagement.Application.GraphQL.Queries;
 using ProductManagement.Infrastructure;
 using ProductManagement.Application;
+using Serilog;
+using ProductManagement.WebAPI.Infrastructure.Middleware;
+using ProductManagement.WebAPI.Infrastructure.GraphQL;
+using ProductManagement.WebAPI.Infrastructure.Grpc;
 
 var builder = WebApplication.CreateBuilder(args);
+
+// Configure Serilog
+builder.Host.UseSerilog((context, services, configuration) => configuration
+    .ReadFrom.Configuration(context.Configuration)
+    .ReadFrom.Services(services)
+    .Enrich.FromLogContext());
 
 // Add Infrastructure services (EF Core, PostgreSQL)
 builder.Services.AddInfrastructure(builder.Configuration);
@@ -24,13 +34,21 @@ builder.Services.AddCors(options =>
 builder.Services
     .AddGraphQLServer()
     .AddQueryType<ProductQueries>()
-    .AddMutationType<ProductMutations>();
+    .AddMutationType<ProductMutations>()
+    .AddErrorFilter<GraphQLErrorFilter>(); // Register GraphQL Error Filter
 
-builder.Services.AddGrpc();
+// Add gRPC with Interceptor
+builder.Services.AddGrpc(options =>
+{
+    options.Interceptors.Add<GrpcExceptionInterceptor>();
+});
 
 var app = builder.Build();
 
 // Configure the HTTP request pipeline
+app.UseMiddleware<GlobalExceptionMiddleware>(); // Global Exception Middleware
+app.UseSerilogRequestLogging(); // Log HTTP requests
+
 app.UseCors("AllowFrontend");
 
 // Map GraphQL endpoint
